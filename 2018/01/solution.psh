@@ -1,0 +1,23 @@
+#!/usr/bin/env pwsh
+
+$sum = 0
+foreach($line in Get-Content .\input.txt) {
+    $sum += [int]$line
+}
+
+Write-Host "Part 1: $sum"
+
+$sum = 0
+$stop = 0
+$set = New-Object System.Collections.Generic.HashSet[int]
+while (-not $stop) {
+    foreach($line in Get-Content .\input.txt) {
+        $sum += [int]$line
+        if (-not $set.add($sum)) {
+            $stop = 1
+            break
+        }
+    }
+}
+
+Write-Host "Part 2: $sum"

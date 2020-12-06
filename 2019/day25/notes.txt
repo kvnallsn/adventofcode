@@ -1,0 +1,16 @@
+Start
+- north -> corridor [infinite loop]
+- east -> engineering - whiteboard w/ springdroid 2 plans
+    - east -> warp drive maintenance [semiconductor]
+        - north -> gift wrapping center [planetoid]
+            - north -> stables [antenna]
+                - west -> navigation
+            - west -> hot chocolate fountain [food ration]
+                - west -> observatory
+                    - west -> acarde [monolith]
+        - east -> hallway [giant electronmagnet]
+            - north -> science lab [molten lava]
+            - south -> holodeck [escape pod]
+                - south -> passages [photons]
+                    - east -> security checkpoint !specific item requored!
+    
