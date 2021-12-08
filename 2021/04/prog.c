@@ -35,7 +35,6 @@ void read_input(char *filename, uint8_t numbers[100], uint8_t boards[100][5][5])
             continue;
         }
 
-        // offset 2 from the first line and blank line
         int board = i / 5;
         int row = i % 5;
         char *token = strtok(line, " ");
@@ -62,17 +61,37 @@ void print_board(uint8_t board[5][5]) {
     printf("%d %d %d %d %d\n", board[4][0], board[4][1], board[4][2], board[4][3], board[4][4]);
 }
 
+uint32_t sum_unmarked(uint8_t board[5][5]) {
+    uint32_t sum = 0;
+    for (int row = 0; row < 5; row++) {
+        for (int col = 0; col < 5; col++) {
+            if (!IS_MARKED(board[row][col])) {
+                sum += board[row][col];
+            }
+        }
+    }
+
+    return sum;
+}
+
 int main(int argc, char *argv[]) {
 
+    uint8_t numSolved = 0;
     uint8_t numbers[100] = { 0 };
+    uint8_t solved[100] = { 0 };
     uint8_t boards[100][5][5] = { 0 };
+    uint32_t part1 = 0;
+    uint32_t part2 = 0;
 
     read_input("input", numbers, boards);
 
     for (int i = 0; i < 100; i++) {
-        printf("%d, ", numbers[i]);
-
         for (int board = 0; board < 100; board++) {
+            if (solved[board]) {
+                // this board has already been solved/is a winner
+                continue;
+            }
+
             // update board with new number
             for (int row = 0; row < 5; row++) {
                 for (int col = 0; col < 5; col++) {
@@ -81,6 +100,8 @@ int main(int argc, char *argv[]) {
                     }
                 }
             }
+
+            uint8_t winner = 0;
 
             // check if board is a winner
             for (int row = 0; row < 5; row++) {
@@ -91,10 +112,7 @@ int main(int argc, char *argv[]) {
                         IS_MARKED(boards[board][row][4])) {
 
                     // winner
-                    printf("row winner\n");
-                    print_board(boards[board]);
-                    exit(0);
-
+                    winner = 1;
                 }
             }
 
@@ -106,18 +124,26 @@ int main(int argc, char *argv[]) {
                         IS_MARKED(boards[board][4][col])) {
 
                     // winner
-                    printf("col winner\n");
-                    print_board(boards[board]);
-                    exit(0);
-
+                    winner = 1;
                 }
+            }
+
+            if (winner) {
+               if (numSolved == 0) {
+                    // first winner (part 1 answer)
+                    part1 = numbers[i] * sum_unmarked(boards[board]);
+                } else if (numSolved == 99) {
+                    part2 = numbers[i] * sum_unmarked(boards[board]); 
+                }
+
+                solved[board] = 1;
+                numSolved += 1;
             }
         }
     }
-    printf("\n");
 
-    //printf("Part 1: %d\n", (depth * position));
-    //printf("Part 2: %d\n", (depth2 * position));
+    printf("Part 1: %d\n", part1);
+    printf("Part 2: %d\n", part2);
 
 
     return 0;
