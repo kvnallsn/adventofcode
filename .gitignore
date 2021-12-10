@@ -259,3 +259,6 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/rust,linux,osx,windows,vim,python,git
 **/prog
 **/*.o
+**/*.test
+**/*.to
+!**/input.test
