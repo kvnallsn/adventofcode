@@ -25,15 +25,10 @@ defmodule Day11 do
   defp compute_offsets(lst, width, offset) do
     lst
     |> Enum.chunk_every(width)
-    |> Enum.map(fn row ->
-      case Enum.all?(row, &(&1 == ".")) do
-        true -> offset
-        false -> 0
-      end
-    end)
+    |> Enum.map(&Enum.all?(&1, fn x -> x == "." end))
     |> Enum.with_index()
-    |> Enum.reduce({%{}, 0}, fn {row_offset, row}, {m, total_offset} ->
-      offset = row_offset + total_offset
+    |> Enum.reduce({%{}, 0}, fn {has_offset, row}, {m, total_offset} ->
+      offset = total_offset + if has_offset, do: offset, else: 0
       {Map.put(m, row, offset), offset}
     end)
     |> elem(0)
@@ -80,7 +75,7 @@ defmodule Day11 do
     Regex.scan(~r/(#)/, universe, capture: :all_but_first, return: :index)
     |> List.flatten()
     |> Enum.map(&elem(&1, 0))
-    |> Enum.map(fn idx -> {rem(idx, width), div(idx, width)} end)
+    |> Enum.map(&{rem(&1, width), div(&1, width)})
     |> Enum.map(fn {col, row} ->
       {col + Map.get(col_offsets, col, 0), row + Map.get(row_offsets, row, 0)}
     end)
